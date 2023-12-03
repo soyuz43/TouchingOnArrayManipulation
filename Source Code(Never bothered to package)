@@ -1,0 +1,99 @@
+#include <iostream>
+#include <algorithm>
+#include <iomanip>
+
+using namespace std;
+
+void arraySort_Swap(double arr[], int n);                                                                                           // Func. Declarations
+
+void calcArray(double arr[], int size, double& sum, double& average, double& highest, double& lowest);
+
+int main()
+{
+    double sum = 0;
+    double average = 0;
+    double highest = 0;
+    double lowest = 0;
+
+
+    double populatedWithRandom[100];
+    for (int i = 0; i < 100; i++)
+    {
+        populatedWithRandom[i] = (rand() % 300) * 1.1234;
+    }
+
+    void (*sortPtr)(double[], int) = &arraySort_Swap;                                                                                // Create function pointers
+    void (*calcPtr)(double[], int, double&, double&, double&, double&) = &calcArray;
+
+    sortPtr(populatedWithRandom, 100);																							     // Call functions by pointer
+    calcPtr(populatedWithRandom, 100, sum, average, highest, lowest);
+
+    cout << "\t\t\tArray Manipulation Program\n" << endl;
+    cout << "\nSum: " << sum << endl;
+    cout << "\nAverage value: " << fixed << setprecision(2) << average << endl;
+    cout << "\nHighest element: " << fixed << setprecision(2) << highest << endl;
+    cout << "\nLowest element: " << fixed << setprecision(2) << lowest << endl;
+    cout << "\n\nAll elements (sorted lowest to highest):" << endl;
+    int rowNumber = 1;
+    for (int i = 0; i < 100; i++)
+    {
+        if (i % 10 == 0)
+    {
+        if (rowNumber < 10)
+            cout << "Row " << rowNumber++ << ": ";
+        else
+            cout << "Row" << rowNumber++ << ": ";
+    }
+
+    cout << setw(10) << fixed << setprecision(2) << populatedWithRandom[i];
+    if ((i + 1) % 10 == 0)
+    {
+        cout << endl;
+        }
+    }
+
+    return 0;
+}
+
+void arraySort_Swap(double arr[], int n)                                                                                             // Function Definitions                         
+{
+    int i;
+    int j;
+    int min_Index;
+
+    for (i = 0; i < n - 1; i++)
+    {
+
+        min_Index = i;
+        for (j = i + 1; j < n; j++)
+            if (arr[j] < arr[min_Index])
+                min_Index = j;
+
+
+        swap(arr[min_Index], arr[i]);
+    }
+}
+
+void calcArray(double arr[], int size, double& sum, double& average, double& highest, double& lowest)
+{
+    sum = 0;
+    lowest = arr[0];
+    highest = arr[0];
+
+    for (int i = 0; i < size; i++)
+    {
+        sum += arr[i];
+
+        if (arr[i] < lowest)
+        {
+            lowest = arr[i];
+        }
+
+        if (arr[i] > highest)
+        {
+            highest = arr[i];
+        }
+    }
+
+    average = sum / size;
+}
